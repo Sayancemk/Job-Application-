@@ -5,6 +5,7 @@ import { urlencoded } from "express";
 
 dotenv.config({ path: "./.env" });
 // connect to database
+
 connectDB()
 .then(()=>{
     app.on("error",(error)=>{
@@ -12,8 +13,8 @@ connectDB()
         throw error;
     })
 
-    app.listen(process.env.PORT||3001,()=>{
-        console.log("Server is running on port no " + process.env.PORT||3001)
+    app.listen(process.env.PORT,()=>{
+        console.log("Server is running on port no " + process.env.PORT)
     })
 })
 .catch((err)=>{

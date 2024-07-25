@@ -1,7 +1,7 @@
 {
   "name": "jobtree",
   "version": "1.0.0",
-  "description": "A Job applocation portal",
+  "description": "A Job application portal",
   "main": "index.js",
   "type": "module",
   "scripts": {

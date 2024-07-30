@@ -1,4 +1,5 @@
 import cloudinary from "cloudinary";
+import { ApiError } from "./ApiError.js";
 import {
     CLOUDINARY_CLOUD_NAME,
     CLOUDINARY_API_KEY,
@@ -10,3 +11,23 @@ cloudinary.v2.config({
     api_key:CLOUDINARY_API_KEY,
     api_secret:CLOUDINARY_API_SECRET
 });
+
+const uploadOnCloudianry=async(filePath)=>{
+    if(!filePath)
+        return null;
+    try{
+        const cloudinaryResponse=await cloudinary.UploadStream.upload(filePath,{folder:"Job_Seekers_Resume"}
+        );
+        return cloudinaryResponse;
+    }
+       
+    catch(error){
+        return null;
+}
+
+}
+
+
+export {
+    uploadOnCloudianry,
+}

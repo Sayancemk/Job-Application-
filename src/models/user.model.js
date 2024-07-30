@@ -37,15 +37,12 @@ const userSchema = new mongoose.Schema({
     niches:{
         firstNiche:{
             type:String,
-            required:true,
         },
         secondNiche:{
             type:String,
-            required:true,
         },
         thirdNiche:{
             type:String,
-            required:true,
         },
     },
         password: {

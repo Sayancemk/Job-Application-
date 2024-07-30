@@ -1,4 +1,4 @@
-import {User} from "../models/user.model.js";
+import User from "../models/user.model.js";
 import {ApiResponce} from "../utils/ApiResponse.js";
 import {ApiError} from "../utils/ApiError.js";
 import {asyncHandler} from "../utils/asyncHandler.js";
@@ -146,4 +146,33 @@ const signUp=asyncHandler(async(req,resp)=>{
         }
     }
     const user=await User.create(userData);
+    return resp
+    .status(201)
+    .json(new ApiResponce(201,user,"User signUp succesfully"));
+
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+export {
+    signUp,
+}

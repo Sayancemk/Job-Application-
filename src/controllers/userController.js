@@ -187,10 +187,16 @@ const signOut=asyncHandler(async(req,resp)=>{
     .json(new ApiResponce(200,{},"User signOut succesfully"));  
 })
 
+const getYourProfile=asyncHandler(async(req,resp)=>{
+    const user=await User.findById(req.user._id);
+    if(!user){
+        throw new ApiError(404,"User not found");
+    }
+    return resp
+    .status(200)
+    .json(new ApiResponce(200,user,"User Profile fetched succesfully"));
 
-
-
-
+})
 
 
 
@@ -201,4 +207,5 @@ export {
     signUp,
     signIn,
     signOut,
+    getYourProfile,
 }

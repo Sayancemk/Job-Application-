@@ -154,18 +154,28 @@ const signUp=asyncHandler(async(req,resp)=>{
 
 })
 
-
-
-
-
-
-
-
-
-
-
-
-
+const signIn=asyncHandler(async(req,resp)=>{
+    const {email,password}=req.body;
+    if(!role || !email || !password){
+        throw new ApiError(400,"email and password is required");
+    }
+    const user=await User.findOne({email:email}).select("+password");
+    if(!user){
+        throw new ApiError(401,"Invalid Credentials")
+    }
+    const isPasswordMatch=await user.comparePassword(password);
+    if(!isPasswordMatch){
+        throw new ApiError(401,"Invalid Credentials")
+    }
+    if(user.role!==role){
+        throw new ApiError(401,"Invalid User Role")
+    }
+    sendToken(user,resp);
+    return resp
+    .status(200)
+    .json(new ApiResponce(200,user,"User signIn succesfully"));
+    
+})
 
 
 
@@ -179,4 +189,5 @@ const signUp=asyncHandler(async(req,resp)=>{
 
 export {
     signUp,
+    signIn,
 }

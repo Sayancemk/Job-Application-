@@ -3,6 +3,7 @@ import {ApiResponce} from "../utils/ApiResponse.js";
 import {ApiError} from "../utils/ApiError.js";
 import {asyncHandler} from "../utils/asyncHandler.js";
 import {uploadOnCloudianry} from "../utils/Cloudinary.js";
+import { sendToken } from "../utils/sendToken.js";
 function isValidUsername(inputString) {
     // Check if the string starts or ends with "-"
     if (inputString.startsWith('-') || inputString.endsWith('-')) {
@@ -146,11 +147,14 @@ const signUp=asyncHandler(async(req,resp)=>{
         }
     }
     const user=await User.create(userData);
+    sendToken(user,resp);
     return resp
     .status(201)
     .json(new ApiResponce(201,user,"User signUp succesfully"));
 
 })
+
+
 
 
 

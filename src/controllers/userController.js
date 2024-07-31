@@ -264,10 +264,28 @@ const deleteUser=asyncHandler(async(req,resp)=>{
 })
 
 const updatePassword=asyncHandler(async(req,resp)=>{
-
+    const user=await User.findById(req.user._id).select("+password");
+    if(!user){
+        throw new ApiError(404,"User not found");
+    }
+    const isPasswordMatch=await user.comparePassword(req.body.currentPassword);
+    if(!isPasswordMatch){
+        throw new ApiError(401,"Invalid Credentials")
+    }
+    const passwordError=isStrongPassword(req.body.newPassword);
+    if(passwordError!==true){
+        throw new ApiError(400,passwordError)
+    }
+    user.password=req.body.newPassword;
+    await user.save();
+    sendToken(user,resp);
+    return resp
+    .status(200)
+    .json(new ApiResponce(200,user,"Password updated succesfully"));
 
 })
 
+const
 
 
 export {
@@ -277,4 +295,5 @@ export {
     getYourProfile,
     updateProfile,
     deleteUser,
+    updatePassword,
 }

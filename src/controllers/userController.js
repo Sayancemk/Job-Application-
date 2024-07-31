@@ -177,6 +177,16 @@ const signIn=asyncHandler(async(req,resp)=>{
     
 })
 
+const signOut=asyncHandler(async(req,resp)=>{
+    res.cookie("token",null,{
+        expires:new Date(Date.now()),
+        httpOnly:true,
+    });
+    return resp
+    .status(200)
+    .json(new ApiResponce(200,{},"User signOut succesfully"));  
+})
+
 
 
 
@@ -190,4 +200,5 @@ const signIn=asyncHandler(async(req,resp)=>{
 export {
     signUp,
     signIn,
+    signOut,
 }

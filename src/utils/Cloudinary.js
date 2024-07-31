@@ -24,10 +24,19 @@ const uploadOnCloudianry=async(filePath)=>{
     catch(error){
         return null;
 }
-
 }
+
+const deleteFromCloudinary = async (public_id) => {
+    try {    
+        const responce = await cloudinary.uploader.destroy(public_id)
+        return responce;
+    } catch (error) {
+      return null;
+    }
+  }
 
 
 export {
     uploadOnCloudianry,
+    deleteFromCloudinary,
 }

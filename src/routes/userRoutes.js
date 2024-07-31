@@ -4,6 +4,8 @@ import {
     signIn,
     signOut,
     getYourProfile,
+    updateProfile,
+    deleteUser,
 
 
 } from "../controllers/userController.js"
@@ -14,6 +16,8 @@ router.route("/sign-up").post(signUp);
 router.route("/sign-in").post(signIn);
 router.route("/sign-out").get(isUserAuthenticated ,signOut);
 router.route("/profile").get(isUserAuthenticated,getYourProfile);
+router.route("/update/profile").put(isUserAuthenticated,updateProfile);
+router.route("/delete").delete(isUserAuthenticated,deleteUser);
 
 
 

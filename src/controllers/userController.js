@@ -2,7 +2,7 @@ import User from "../models/user.model.js";
 import {ApiResponce} from "../utils/ApiResponse.js";
 import {ApiError} from "../utils/ApiError.js";
 import {asyncHandler} from "../utils/asyncHandler.js";
-import {uploadOnCloudianry} from "../utils/Cloudinary.js";
+import {uploadOnCloudianry,deleteFromCloudinary} from "../utils/Cloudinary.js";
 import { sendToken } from "../utils/sendToken.js";
 function isValidUsername(inputString) {
     // Check if the string starts or ends with "-"
@@ -198,8 +198,75 @@ const getYourProfile=asyncHandler(async(req,resp)=>{
 
 })
 
+const updateProfile=asyncHandler(async(req,resp)=>{
+const newUserData={
+    name:req.body.name || req.user.name,
+    email:req.body.email || req.user.email,
+    phone:req.body.phone || req.user.phone,
+    address:req.body.address || req.user.address,
+    coverLetter:req.body.coverLetter || req.user.coverLetter,
+    niches:{
+        firstNiche:req.body.firstNiche || req.user.niches.firstNiche,
+        secondNiche:req.body.secondNiche || req.user.niches.secondNiche,
+        thirdNiche:req.body.thirdNiche || req.user.niches.thirdNiche,
+    }
+}
+if(!name || !email || !phone || !address || !coverLetter){
+    throw new ApiError(400,"Please fill in all the fields");
+}
+    const {firstNiche,secondNiche,thirdNiche}=newUserData.niches;
+
+    if(req.user.role==="JobSeeker" && (!firstNiche || !secondNiche || !thirdNiche)){
+        throw new ApiError(400,"Please fill in all the choice fields or niches");
+    }
+    if(req.user.role==="Employer" && (!coverLetter)){
+        throw new ApiError(400,"Please fill in coverletter fields");
+    }
+    if(req.files){
+        const {resume}=req.files;
+        if(!resume){
+            throw new ApiError(400,"resume or filePath is required")
+        }
+       const currentcurrentResumeId=req.user.resume.public_id;
+       if(currentcurrentResumeId){
+           await deleteFromCloudinary(currentcurrentResumeId);
+       }
+        const newResume=await uploadOnCloudianry(resume.tempFilepath);
+        if(!newResume){
+            throw new ApiError(500,"Failed to upload resume on cloudinary")
+        }
+        newUserData.resume={
+            public_id:newResume.public_id,
+            url:newResume.secure_url,
+        }
+    }
+    const user=await User.findByIdAndUpdate(req.user._id,newUserData,{
+        new:true,
+        runValidators:true,
+        useFindAndModify:false,
+    });
+    return resp
+    .status(200)
+    .json(new ApiResponce(200,user,"User Profile updated succesfully"));
+
+})
+
+const deleteUser=asyncHandler(async(req,resp)=>{
+    const user=req.user._id;
+    if(!user){
+        throw new ApiError(404,"User not found");
+    }
+    await User.findByIdAndDelete(user);
+    return resp
+    .status(200)
+    .json(new ApiResponce(200,{},"User deleted succesfully"));
+
+})
+
+const updatePassword=asyncHandler(async(req,resp)=>{
 
 
+})
 
 
 
@@ -208,4 +275,6 @@ export {
     signIn,
     signOut,
     getYourProfile,
+    updateProfile,
+    deleteUser,
 }

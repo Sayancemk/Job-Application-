@@ -268,9 +268,15 @@ const updatePassword=asyncHandler(async(req,resp)=>{
     if(!user){
         throw new ApiError(404,"User not found");
     }
-    const isPasswordMatch=await user.comparePassword(req.body.currentPassword);
+    const isPasswordMatch=await user.comparePassword(req.body.oldPassword);
     if(!isPasswordMatch){
-        throw new ApiError(401,"Invalid Credentials")
+        throw new ApiError(401,"old password is incorrect");
+    }
+    if(req.body.oldPassword===req.body.newPassword){
+        throw new ApiError(400,"New password cannot be the same as old password");
+    }
+    if(req.body.newPassword!==req.body.confirmPassword){
+        throw new ApiError(400,"Password does not match");
     }
     const passwordError=isStrongPassword(req.body.newPassword);
     if(passwordError!==true){
@@ -295,6 +301,6 @@ export {
     signOut,
     getYourProfile,
     updateProfile,
-    deleteUser,
     updatePassword,
+    deleteUser,
 }

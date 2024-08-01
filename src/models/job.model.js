@@ -21,13 +21,18 @@ const jobSchema = new mongoose.Schema({
     jobType: {
         type: String,
         required: true,
-        default:["Full-Time","Part-Time","Contract","Internship","Temporary"]
+        enum:["Full-Time","Part-Time","Contract","Internship","Temporary"]
     },
     experience: {
         type: String,
-        required: true
+        required: true,
+        enum:["Entry Level","Mid Level","Senior Level"]
     },
     qualification: {
+        type: String,
+        required: true
+    },
+    responsibilities: {
         type: String,
         required: true
     },
@@ -59,12 +64,11 @@ const jobSchema = new mongoose.Schema({
     },
     newsLetterSent:{
         type: Boolean,
-        required: true,
         default: false
     },
     hiringMultipleCandidate:{
         type: Boolean,
-        required: true,
+        enum: [true, false],
         default: false
     },
     jobStatus:{
@@ -75,7 +79,7 @@ const jobSchema = new mongoose.Schema({
     offers:{
         type:String,
     },
-});
+},{timestamps:true});
 
 
 const Job = mongoose.model("Job", jobSchema);

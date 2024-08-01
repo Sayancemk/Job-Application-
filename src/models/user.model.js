@@ -68,7 +68,12 @@ const userSchema = new mongoose.Schema({
             type:String,
             required:true,
             enum:["Employer","JobSeeker"],
-        }
+        },
+        jobCompany:{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"Company",
+        },
+        
 },{timestamps:true});
 
 

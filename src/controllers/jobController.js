@@ -10,7 +10,7 @@ const createJob=asyncHandler(async(req,resp)=>{
     }
 
     if(req.user.role!=="Employer"){
-          throw new ApiError(403,"Forbidden,You are not allowed to create job");
+          throw new ApiError(403,`Forbidden,${req.user.role} are not allowed to create job`);
     }
 
     if(!req.user.jobCompany){
@@ -78,7 +78,7 @@ const createJob=asyncHandler(async(req,resp)=>{
     if(!job){
         throw new ApiError(500,"Job could not be created");
     }
-    
+
     return resp
     .status(201)
     .json(new ApiResponse(201,{job},"Job created successfully"));

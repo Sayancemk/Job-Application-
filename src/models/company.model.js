@@ -5,7 +5,6 @@ const companySchema = new mongoose.Schema({
    
     logo: {
         type: String,
-        required: true
     },
     name: {
         type: String,
@@ -20,7 +19,6 @@ const companySchema = new mongoose.Schema({
     },
     address: {
         type: String,
-        required: true
     },
     phone: {
         type: String,
@@ -40,17 +38,15 @@ const companySchema = new mongoose.Schema({
     },
     headQuarter: {
         type: String,
-        required: true,
-       
     },
     partners: {
         type: String,
     },
-    niches: {
-        type: String,
-        required: true
-    },
-
+    userId:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User",
+        required:true,
+    }
 },{timestamps:true});
 
 const Company = mongoose.model("Company", companySchema);

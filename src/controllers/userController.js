@@ -178,7 +178,7 @@ const signIn=asyncHandler(async(req,resp)=>{
 })
 
 const signOut=asyncHandler(async(req,resp)=>{
-    res.cookie("token",null,{
+    resp.cookie("token",null,{
         expires:new Date(Date.now()),
         httpOnly:true,
     });

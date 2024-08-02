@@ -50,8 +50,11 @@ const createJob=asyncHandler(async(req,resp)=>{
     ){
         throw new ApiError(400,"please fill the all the job details");
     }
+
     const postedBy=req.user._id;
+
     const company=req.user.jobCompany;
+
     const job=await Job.create({
         title,
         description,
@@ -71,9 +74,11 @@ const createJob=asyncHandler(async(req,resp)=>{
         postedBy,
         company
     });
+
     if(!job){
         throw new ApiError(500,"Job could not be created");
     }
+    
     return resp
     .status(201)
     .json(new ApiResponse(201,{job},"Job created successfully"));

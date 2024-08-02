@@ -74,7 +74,8 @@ const jobSchema = new mongoose.Schema({
     jobStatus:{
         type: String,
         required: true,
-        default:["Active","Inactive"]
+        enum:["Active","Inactive"],
+        default:"Active",
     },
     offers:{
         type:String,

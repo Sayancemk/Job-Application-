@@ -85,7 +85,22 @@ const createJob=asyncHandler(async(req,resp)=>{
 
 })
 
+const getAllJobs=asyncHandler(async(req,resp)=>{
+    const{city,jobNiches,searchKeyword}=req.query;
+    const query={}
+    if(city){
+        query.location=city;
+    }
+    if(jobNiches){
+        query.jobNiches=jobNiches;
+    }
+    if(searchKeyword){
+        query.$or=[
+           {title:{$regex:searchKeyword,$options:""}},
 
+        ]
+    }
+})
 
 
 export{

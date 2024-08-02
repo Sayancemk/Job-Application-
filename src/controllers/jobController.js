@@ -4,13 +4,26 @@ import ApiResponse from "../utils/ApiResponse.js";
 import asyncHandler from "../middlewares/asyncHandler.js";
 
 const createJob=asyncHandler(async(req,resp)=>{
+    
+    if(!req.user){
+      throw new ApiError(401,"Unauthorized,Please login first");
+    }
+
+    if(req.user.role!=="Employer"){
+          throw new ApiError(403,"Forbidden,You are not allowed to create job");
+    }
+
+    if(!req.user.jobCompany){
+        throw new ApiError(401,"please provide the company name")
+    }
+
     const{
         title,
         description,
+        responsibilities,
         location,
         salary,
         jobType,
-        responsibilities,
         experience,
         qualification,
         skills,
@@ -22,9 +35,6 @@ const createJob=asyncHandler(async(req,resp)=>{
         offer,
     }=req.body;
 
-    if(!req.user){
-        throw new ApiError(401,"Unauthorized,Please login first");
-    }
     if(!title || 
         !description || 
         !location || 
@@ -39,9 +49,6 @@ const createJob=asyncHandler(async(req,resp)=>{
         !jobStatus
     ){
         throw new ApiError(400,"please fill the all the job details");
-    }
-    if(req.user.role!=="Employer"){
-        throw new ApiError(403,"Forbidden,You are not allowed to create job");
     }
     const postedBy=req.user._id;
     const company=req.user.jobCompany;

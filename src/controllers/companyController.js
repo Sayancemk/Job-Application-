@@ -197,27 +197,38 @@ const updateJob=asyncHandler(async(req,resp)=>{
     if(!req.user){
         throw new ApiError(401,"Unauthorized,Please login first");
     }
-    
+
     if(req.user.role!=="Employer"){
           throw new ApiError(403,`Forbidden,${req.user.role}, you are  not eligible to use this path `);
     }
+    
     const updates=Object.keys(req.body);
+
     const allowedUpadtes=["title","description","location","salary","jobStatus","jobNiches","deadline","skills","jobType"];
+
     const isValidOperation=updates.every(update=>allowedUpadtes.includes(update));
+
     if(!isValidOperation){
         throw new ApiError(400,"Invalid upadte operation")
     }
+
     const {jobId}=req.params;
+    
     if(!jobId){
         throw new ApiError (400,"JobId is required to delete the jobPost")
     }
+
     const job=await Job.findById(jobId);
+
     if(!job){
         throw new ApiError(400,"Job is not find")
     }
+
     updates.forEach(update=>job[update]=req.body[update]);
+
     await job.save();
-   return resp
+
+    return resp
     .status(200)
     .json(new ApiResponse(200,job,"Job updated successfully"));
 })

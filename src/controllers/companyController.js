@@ -94,7 +94,7 @@ const getCompanyFindById=asyncHandler(async(req,resp)=>{
     .status(200)
     .json(new ApiResponse(200,findCompany,"This is your searched company"))
 })
-
+/*
 const updateCompanyDetails=asyncHandler(async(req,resp)=>{
     if(!req.user){
         throw new ApiError(401,"Unauthorized,Please login first");
@@ -143,7 +143,58 @@ const updateCompanyDetails=asyncHandler(async(req,resp)=>{
     .status(200)
     .json(new ApiResponse(200,company,"Company data finally updated"))
 
+})*/
+
+const updateCompanyDetails=asyncHandler(async(req,resp)=>{
+ 
+    if(!req.user){
+        throw new ApiError(401,"Unauthorized,Please login first");
+    }
+    if(req.user.role!=="Employer"){
+          throw new ApiError(403,`Forbidden,${req.user.role}, you are  not eligible to use this path `);
+    }
+    const{companyId}=req.params;
+    if(!companyId){
+        throw new ApiError(400,"CompanyId is required to update")
+    }
+    const {name,email,website,description,address}=req.body;
+    if(!name || !email || !website){
+        throw new ApiError(400,"please fill all the fields")
+    }
+    const updateData={name,email,website,description,address}
+    if(req.files){
+        const {logo}=req.files;
+        if(!logo){
+            throw new ApiError(400,"logo or filepath required")
+        }
+        const currentlogoId=req.user.jobCompany.logo.public_id;
+        if(currentlogoId){
+            await deleteFromCloudinary(currentlogoId);
+        }
+        const newLogo=await uploadOnCloudianry(logo.tempFilepath);
+        if(!newLogo){
+            throw new ApiError(500,"Failed to upload resume on cloudinary")
+        }
+        updateData.logo={
+            public_id:newLogo.public_id,
+            url:newLogo.secure_url,
+        }
+
+    }
+    const company=await Company.findByIdAndUpdate(companyId,updateData,{
+        new:true,
+        runValidators:true,
+        useFindAndModify:false,
+    });
+    
+    if(!company){
+        throw new ApiError(400,"company is not find")
+    }
+    return resp
+    .status(200)
+    .json(new ApiResponse(200,company,"Company data finally updated"))
 })
+
 
 export{
     userRegisterInCompany,

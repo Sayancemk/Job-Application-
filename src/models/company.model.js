@@ -4,7 +4,12 @@ import mongoose from "mongoose";
 const companySchema = new mongoose.Schema({
    
     logo: {
-        type: String,
+        public_id:{
+            type:String,
+        },
+        url:{
+            type:String,
+        },
     },
     name: {
         type: String,

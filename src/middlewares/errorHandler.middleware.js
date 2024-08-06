@@ -1,8 +1,8 @@
-import {ApiResponce} from "../utils/ApiResponse.js"
+import {ApiResponse} from "../utils/ApiResponse.js"
 
 const errorHandler = (err, req, res, next) => {
     res.status(200)
-    .json(new ApiResponce(err.statusCode || 500,null, err.message));
+    .json(new ApiResponse(err.statusCode || 500,null, err.message));
 };
 
 export default errorHandler;

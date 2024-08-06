@@ -1,8 +1,8 @@
 import { asyncHandler} from "../utils/asyncHandler.js";    
 import { ApiError } from "../utils/ApiError.js";
-import { ApiResponce} from "../utils/ApiResponse";
+import { ApiResponse} from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
-import User from "../models/userModel.js";
+import User from "../models/user.model.js";
 
 const isUserAuthenticated = asyncHandler(async (req,resp,next) => {
     try{

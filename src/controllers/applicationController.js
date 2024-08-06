@@ -4,6 +4,7 @@ import {ApiResponse} from "../utils/ApiResponse.js";
 import {asyncHandler} from "../utils/asyncHandler.js";
 import Job from "../models/job.model.js";
 import {uploadOnCloudianry,deleteFromCloudinary} from "../utils/cloudinary.js";
+import { response } from "express";
 const postapplication = asyncHandler(async (req, res) => {
     if(!req.user){
         throw new ApiError(401, 'Unauthorized');
@@ -123,17 +124,76 @@ const getAllApplicationsByJobSeeker = asyncHandler(async (req, res) => {
 
 })
 
-const deletedJob=asyncHandler(async(req,res)=>{
+const deletedJobApplication=asyncHandler(async(req,res)=>{
     if(!req.user){
         throw new ApiError(401,"Unauthorised")
     }
-    
+    const{id}=req.params;
+    if(!id){
+       throw new ApiError(400,"id is required") 
+    }
+    const applicationDetails=await Application.findById(id);
+    if(!applicationDetails){
+        throw new ApiError(400,"Apploication details is not find")
+    }
+    const role=req.user.role;
+    switch(role){
+        case "JobSeeker":
+            applicationDetails.deletedBy.jobSeeker=true;
+            await Application.save();
+            break;
+
+        case " Employeer":
+            applicationDetails.deletedBy. Employeer=true;
+            await Application.save();
+            break;
+        default:
+            console.log("Default case for Application function")
+            break;
+    }
+  if(Application.deletedBy.Employeer===true && Application.deletedBy.jobSeeker===true){
+    await Application.deleteOne();
+  }
+  return res
+  .status(201)
+  .json(new ApiResponse(200,{},"application deleted succcessfully"))
+})
+
+const updateStatus=asyncHandler(async(req,res)=>{
+    if(!req.user){
+        throw new ApiError(401,"Unauthorised")
+    }
+    if(req.user.role==="jobSeeker"){
+        throw new ApiError(400,"you can not authenticated to use this route")
+    }
+    const{status}=req.body;
+    // Application Id
+    if(!status){
+        throw new ApiError (400,"status is required to update")
+    }
+    const {id}=req.params;
+    if(!id){
+        throw new ApiError(400,"Id is required")
+    }
+    const applicationDetails=await Application.findById(id);
+    if(!applicationDetails){
+        throw new ApiError(400,"application details is not find")
+    }
+    applicationDetails.status=status.toLowerCase();
+    const updateApplication=await Application.save();
+    if(!updateApplication){
+        throw new ApiError(400,"somethinhg went wrong")
+    }
+    return res
+    .status(200)
+    .json(new ApiResponse(200,updateApplication,"status updated successfully"))
 })
 
 export {
     postapplication,
     getAllApplicationsByEmployee,
     getAllApplicationsByJobSeeker,
-
+    deletedJobApplication,
+    updateStatus,
 }
 

@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import errorhandler from './middlewares/errorHandler.middleware.js';
 import userRouter from "./routes/userRoutes.js";
 import jobRouter from "./routes/jobRoutes.js";
+import companyRouter from "./routes/companyRoutes.js";
 import applicationRouter from "./routes/applicationRoutes.js";
 import fileUpload from "express-fileupload";
 
@@ -33,6 +34,7 @@ app.use(
 
 app.use("/api/v1/user",userRouter);
 app.use("/api/v1/job",jobRouter);
+app.use("/api/v1/comapny",companyRouter);
 app.use("api/v1/application",applicationRouter);
 
 app.use(errorhandler);

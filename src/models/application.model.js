@@ -82,7 +82,7 @@ const applicationSchema = new mongoose.Schema({
             type: Boolean,
             default: false
         },
-        employeer:{
+        Employeer:{
             type: Boolean,
             default: false
         },

@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+import validator from "validator";
 const applicationSchema = new mongoose.Schema({
 
     jobSeekerInfo: {
@@ -55,7 +55,46 @@ const applicationSchema = new mongoose.Schema({
     },
 }, 
 
+    employeerInfo: {
+        id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: true
+        },
+      role: {
+        type: String,
+        enum:["Employeer"],
+        required: true
+      },
+    },
+      jobInfo:{
+        jobId: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true
+        },
+        jobTitle: {
+            type: String,
+            required: true
+        },
+      },
+      deletedBy:{
+        jobSeeker:{
+            type: Boolean,
+            default: false
+        },
+        employeer:{
+            type: Boolean,
+            default: false
+        },
+      },
+      status: {
+        type: String,
+        enum:["Pending", "Accepted", "Rejected"],
+        default: "Pending"
+      },
+    } , 
+{timestamps: true });
 
+const Application = mongoose.model('Application', applicationSchema);
 
-
-});
+export default Application;

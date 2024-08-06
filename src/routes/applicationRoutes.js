@@ -2,6 +2,7 @@ import express from "express";
 import{
     postapplication,
     getAllApplicationsByEmployee,
+    getAllApplicationsByJobSeeker,
 
 
 } from "../controllers/applicationController.js";
@@ -12,6 +13,6 @@ router.route("/apply/:id").post(isUserAuthenticated,postapplication);
 
 router.route("/applicationsForEmployee").get(isUserAuthenticated,getAllApplicationsByEmployee);    
 
-
+router.route("/applicationsByJobSeeker").get(isUserAuthenticated,getAllApplicationsByJobSeeker);
 
 export default router;

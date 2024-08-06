@@ -106,7 +106,6 @@ const getAllApplicationsByEmployee = asyncHandler(async (req, res) => {
 });
 
 const getAllApplicationsByJobSeeker = asyncHandler(async (req, res) => {
-
     if(!req.user){
         throw new ApiError(401, 'Unauthorized');
     }
@@ -124,9 +123,17 @@ const getAllApplicationsByJobSeeker = asyncHandler(async (req, res) => {
 
 })
 
+const deletedJob=asyncHandler(async(req,res)=>{
+    if(!req.user){
+        throw new ApiError(401,"Unauthorised")
+    }
+    
+})
+
 export {
     postapplication,
     getAllApplicationsByEmployee,
+    getAllApplicationsByJobSeeker,
 
 }
 

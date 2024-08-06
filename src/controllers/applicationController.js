@@ -25,11 +25,7 @@ const postapplication = asyncHandler(async (req, res) => {
 
 if(!name || !email || !phone || !address ){
     throw new ApiError(400, 'Please fill all the fields');
-}
-const isApplicationExist = await applicationSchema.findOne({" jobInfo.id":id,"jobSeekerInfo.id": req.user._id}); 
-if(isApplicationExist){
-    throw new ApiError(400, 'You have already applied for this job');
-}
+};
 const jobapllicationInfo={
     id: req.user._id,
     name,
@@ -46,6 +42,10 @@ const jobDetails = await Job.findById(id);
 if(!jobDetails){
     throw new ApiError(404, 'Job not found');
 };
+const isApplicationExist = await applicationSchema.findOne({" jobInfo.id":id,"jobSeekerInfo.id": req.user._id}); 
+if(isApplicationExist){
+    throw new ApiError(400, 'You have already applied for this job');
+}
 if(req.user._id === jobDetails.postedBy){
     throw new ApiError(400, 'You cannot apply for your own job');
 };
@@ -89,10 +89,44 @@ if(!application){
  .json(new ApiResponse(201, 'Application created', application));
 })
 
+const getAllApplicationsByEmployee = asyncHandler(async (req, res) => {
+    if(!req.user){
+        throw new ApiError(401, 'Unauthorized');
+    };
+    if(req.user.role==="JobSeeker"){
+        throw new ApiError(403, 'JobSeeker cannot view applications');
+    };
+    const applications = await Application.find({"employeerInfo.id": req.user._id,"isDeleted.employeer": false});
+    if(!applications){
+        throw new ApiError(404, 'Applications not found');
+    }
+    return res
+    .status(200)
+    .json(new ApiResponse(200, 'Applications found', applications));
+});
 
+const getAllApplicationsByJobSeeker = asyncHandler(async (req, res) => {
+
+    if(!req.user){
+        throw new ApiError(401, 'Unauthorized');
+    }
+    if(req.user.role==="Employeer"){
+        throw new ApiError(403, 'Employeer cannot view allJobseekerallapplications');
+    }
+    const applications = await Application.find({"jobSeekerInfo.id": req.user._id,"isDeleted.jobSeeker": false});
+    if(!applications){
+        throw new ApiError(404, 'Applications not found');
+    }
+    return res
+    .status(200)
+    .json(new ApiResponse(200, 'Applications found', applications));
+
+
+})
 
 export {
     postapplication,
+    getAllApplicationsByEmployee,
 
 }
 

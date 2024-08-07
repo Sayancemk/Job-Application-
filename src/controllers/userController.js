@@ -155,9 +155,9 @@ const signUp=asyncHandler(async(req,resp)=>{
 })
 
 const signIn=asyncHandler(async(req,resp)=>{
-    const {email,password}=req.body;
+    const {email,password,role}=req.body;
     if(!role || !email || !password){
-        throw new ApiError(400,"email and password is required");
+        throw new ApiError(400,"email and password  also role is required");
     }
     const user=await User.findOne({email:email}).select("+password");
     if(!user){
@@ -178,7 +178,7 @@ const signIn=asyncHandler(async(req,resp)=>{
 })
 
 const signOut=asyncHandler(async(req,resp)=>{
-    resp.cookie("token",null,{
+    resp.cookie("token","",{
         expires:new Date(Date.now()),
         httpOnly:true,
     });

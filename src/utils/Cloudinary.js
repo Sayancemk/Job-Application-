@@ -16,7 +16,7 @@ const uploadOnCloudianry=async(filePath)=>{
     if(!filePath)
         return null;
     try{
-        const cloudinaryResponse=await cloudinary.UploadStream.upload(filePath,{folder:"Job_Seekers_Resume"}
+        const cloudinaryResponse=await cloudinary.uploader.upload(filePath,{resource_type:"auto",folder:"Job_Seekers_Resume"}
         );
         return cloudinaryResponse;
     }

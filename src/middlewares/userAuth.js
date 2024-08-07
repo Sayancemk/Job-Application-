@@ -14,7 +14,7 @@ const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 if (!decodedToken) {
     throw new ApiError(401, "User is not authenticated");    
 }
-const user = await User.findById(decodedToken.id);
+const user = await User.findById(decodedToken._id);
 if (!user) {
     return next();
 }

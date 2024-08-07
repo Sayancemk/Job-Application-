@@ -10,7 +10,7 @@ const {token} = req.cookies;
 if (!token) {
     throw new ApiError(401, "User is not authenticated");    
 }
-const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+const decodedToken = jwt.verify(token, process.env.JWT_SECRET_KEY);
 if (!decodedToken) {
     throw new ApiError(401, "User is not authenticated");    
 }

@@ -107,12 +107,12 @@ const signUp=asyncHandler(async(req,resp)=>{
       //check username is already exists
     const existingUser=await User.findOne({name:name});
       if(existingUser){
-          throw new ApiError (400,"user is alreadsy exists");
+          throw new ApiError (400,"user is already exists");
     }
         // check email is already exists
     const existingEmail=await User.findOne({email:email});
     if(existingEmail){
-        throw new ApiError(400, " email is alraedy exists");
+        throw new ApiError(400, " email is already exists");
     }
 
     const userData={

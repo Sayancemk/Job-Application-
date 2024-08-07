@@ -79,7 +79,7 @@ const signUp=asyncHandler(async(req,resp)=>{
         coverLetter}=req.body;
     
     if(!name || !email || !phone ||!address ||!password ||!role){
-        throw new ApiError(400,"Please fill in all the fields");
+        throw new ApiError(400,"Please fill in all the fields ");
     }
     //check for the JobSeeker
     if(role==="JobSeeker" && (!firstNiche || !secondNiche || !thirdNiche)){
@@ -150,7 +150,7 @@ const signUp=asyncHandler(async(req,resp)=>{
     sendToken(user,resp);
     return resp
     .status(201)
-    .json(new ApiResponce(201,user,"User signUp succesfully"));
+    .json(new ApiResponse(201,user,"User signUp succesfully"));
 
 })
 
@@ -173,7 +173,7 @@ const signIn=asyncHandler(async(req,resp)=>{
     sendToken(user,resp);
     return resp
     .status(200)
-    .json(new ApiResponce(200,user,"User signIn succesfully"));
+    .json(new ApiResponse(200,user,"User signIn succesfully"));
     
 })
 
@@ -184,7 +184,7 @@ const signOut=asyncHandler(async(req,resp)=>{
     });
     return resp
     .status(200)
-    .json(new ApiResponce(200,{},"User signOut succesfully"));  
+    .json(new ApiResponse(200,{},"User signOut succesfully"));  
 })
 
 const getYourProfile=asyncHandler(async(req,resp)=>{
@@ -194,7 +194,7 @@ const getYourProfile=asyncHandler(async(req,resp)=>{
     }
     return resp
     .status(200)
-    .json(new ApiResponce(200,user,"User Profile fetched succesfully"));
+    .json(new ApiResponse(200,user,"User Profile fetched succesfully"));
 
 })
 
@@ -247,7 +247,7 @@ if(!name || !email || !phone || !address || !coverLetter){
     });
     return resp
     .status(200)
-    .json(new ApiResponce(200,user,"User Profile updated succesfully"));
+    .json(new ApiResponse(200,user,"User Profile updated succesfully"));
 
 })
 
@@ -259,7 +259,7 @@ const deleteUser=asyncHandler(async(req,resp)=>{
     await User.findByIdAndDelete(user);
     return resp
     .status(200)
-    .json(new ApiResponce(200,{},"User deleted succesfully"));
+    .json(new ApiResponse(200,{},"User deleted succesfully"));
 
 })
 
@@ -287,7 +287,7 @@ const updatePassword=asyncHandler(async(req,resp)=>{
     sendToken(user,resp);
     return resp
     .status(200)
-    .json(new ApiResponce(200,user,"Password updated succesfully"));
+    .json(new ApiResponse(200,user,"Password updated succesfully"));
 
 })
 

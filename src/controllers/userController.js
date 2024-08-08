@@ -178,14 +178,17 @@ const signIn=asyncHandler(async(req,resp)=>{
 })
 
 const signOut=asyncHandler(async(req,resp)=>{
-    resp.cookie("token","",{
-        expires:new Date(Date.now()),
-        httpOnly:true,
-    });
+    const options = {
+        httpOnly: true,
+        secure: true,
+        sameSite: "None",
+    }
     return resp
     .status(200)
-    .json(new ApiResponse(200,{},"User signOut succesfully"));  
+    // .clearCookie("token", { ...options, maxAge: (86400000 * 180) })
+    .json(new ApiResponse(200, {}, "User logged out successfully"));
 })
+  
 
 const getYourProfile=asyncHandler(async(req,resp)=>{
     const user=await User.findById(req.user._id);
@@ -199,6 +202,9 @@ const getYourProfile=asyncHandler(async(req,resp)=>{
 })
 
 const updateProfile=asyncHandler(async(req,resp)=>{
+    if(!req.user){
+        throw new ApiError(404,"User not found");
+    }
 const newUserData={
     name:req.body.name || req.user.name,
     email:req.body.email || req.user.email,
@@ -211,9 +217,7 @@ const newUserData={
         thirdNiche:req.body.thirdNiche || req.user.niches.thirdNiche,
     }
 }
-if(!name || !email || !phone || !address || !coverLetter){
-    throw new ApiError(400,"Please fill in all the fields");
-}
+
     const {firstNiche,secondNiche,thirdNiche}=newUserData.niches;
 
     if(req.user.role==="JobSeeker" && (!firstNiche || !secondNiche || !thirdNiche)){
@@ -265,6 +269,7 @@ const deleteUser=asyncHandler(async(req,resp)=>{
 
 const updatePassword=asyncHandler(async(req,resp)=>{
     const user=await User.findById(req.user._id).select("+password");
+    console.log(user);
     if(!user){
         throw new ApiError(404,"User not found");
     }

@@ -3,7 +3,7 @@ import {ApiError} from "../utils/ApiError.js";
 import {ApiResponse} from "../utils/ApiResponse.js";
 import {asyncHandler} from "../utils/asyncHandler.js";
 import Job from "../models/job.model.js";
-import {uploadOnCloudianry,deleteFromCloudinary} from "../utils/cloudinary.js";
+import {uploadOnCloudianry,deleteFromCloudinary} from "../utils/Cloudinary.js";
 import { response } from "express";
 const postapplication = asyncHandler(async (req, res) => {
     if(!req.user){
